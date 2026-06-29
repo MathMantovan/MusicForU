@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="MusicForU.API/MusicForU.API.csproj" />
+  <Project Path="MusicForU.Application/MusicForU.Application.csproj" />
+  <Project Path="MusicForU.Domain/MusicForU.Domain.csproj" />
+  <Project Path="MusicForU.Infrastructure/MusicForU.Infrastructure.csproj" />
+  <Project Path="MusicForU.Tests/MusicForU.Tests.csproj" />
+  <Project Path="MusicForU.Web/MusicForU.Web.csproj" />
+</Solution>

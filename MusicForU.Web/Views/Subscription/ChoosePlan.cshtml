@@ -1,0 +1,36 @@
+@model List<MusicForU.Application.DTOs.PlanDto>
+@{ ViewData["Title"] = "Escolha seu Plano"; }
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2 class="text-center mb-4">Escolha um plano para começar</h2>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger text-center">@ViewBag.Error</div>
+        }
+
+        <div class="row">
+            @foreach (var plan in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card shadow-sm text-center mb-3">
+                        <div class="card-body">
+                            <h4 class="card-title">@plan.Name</h4>
+                            <p class="display-6 fw-bold">
+                                @(plan.Price == 0 ? "Grátis" : plan.Price.ToString("C"))
+                            </p>
+                            <p class="text-muted">@plan.DurationDays dias</p>
+                            <form method="post" asp-action="Subscribe">
+                                <input type="hidden" name="planId" value="@plan.Id" />
+                                <button type="submit" class="btn @(plan.Price == 0 ? "btn-outline-primary" : "btn-primary") w-100">
+                                    @(plan.Price == 0 ? "Começar Grátis" : "Assinar")
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

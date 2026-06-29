@@ -1,0 +1,47 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+## IDE
+.vs/
+.vscode/
+.idea/
+*.swp
+*~
+
+## Build
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+build/
+baked/
+packages/
+TestResults/
+*.nupkg
+
+## NuGet
+**/packages/*
+!**/packages/build/
+
+## Secrets / Config
+**/appsettings.Development.json
+
+## Project docs (not for repo)
+CLAUDE.md
+GUIA_PROJETO_MUSICFORU.md
+MEMORY.md
+
+## OS
+Thumbs.db
+.DS_Store
+desktop.ini
+
+## Publish
+publish/
+*.zip
