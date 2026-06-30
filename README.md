@@ -317,7 +317,42 @@ Pipeline:
 Cada workflow publica apenas o projeto correspondente usando `dotnet publish` no `.csproj` correto.
 
 As migrations são aplicadas automaticamente na inicialização da API.
+## Justificativa do Provisionamento na Azure
 
+O provisionamento na Azure foi escolhido com foco em simplicidade, baixo custo, performance adequada ao escopo do projeto e sustentabilidade operacional. Como o MusicForU é um projeto acadêmico, com carga de usuários reduzida e uso demonstrativo, a arquitetura prioriza recursos leves e gerenciados, evitando superdimensionamento.
+
+### App Service Free F1
+
+A API e o frontend MVC foram publicados em dois App Services separados no plano Free F1. Essa escolha mantém a separação entre backend e frontend, preservando a arquitetura do projeto, mas sem gerar custo fixo para testes e apresentação.
+
+Do ponto de vista de performance, o Free F1 é suficiente para o cenário esperado: poucos acessos simultâneos, endpoints simples e baixo volume de dados. Caso o uso cresça, a solução pode ser escalada para planos pagos do App Service sem alteração relevante no código, pois a aplicação já está preparada para configuração por ambiente.
+
+Do ponto de vista de sustentabilidade, usar o menor plano necessário evita desperdício de CPU, memória e recursos de nuvem. A aplicação consome apenas o necessário para validar as rubricas e pode ser desligada ou escalada conforme a demanda real.
+
+### Azure SQL Database
+
+O Azure SQL foi escolhido por ser um banco relacional gerenciado e compatível com Entity Framework Core e SQL Server, que já são usados no projeto localmente. Isso reduz risco de incompatibilidade entre desenvolvimento e produção e permite reaproveitar migrations, relacionamentos, índices e constraints sem reescrever a camada de dados.
+
+A escolha também melhora a performance para o tipo de dado do sistema. O MusicForU trabalha com entidades relacionais, como usuários, planos, assinaturas, músicas, álbuns, bandas, favoritos, playlists e transações. Essas informações possuem relacionamentos claros, chaves estrangeiras e consultas que se beneficiam de índices, como a busca por título de música e nome de banda.
+
+Além disso, o Azure SQL oferece:
+
+- execução gerenciada, sem necessidade de manter servidor SQL manualmente;
+- backups e disponibilidade administrados pela plataforma;
+- conexão segura com criptografia;
+- suporte direto a migrations do EF Core;
+- possibilidade de escalar para tiers superiores se a carga aumentar;
+- bom desempenho para consultas relacionais e transacionais.
+
+Para este projeto, o banco foi mantido no menor tier disponível para reduzir custo. A performance é suficiente porque o volume de dados é pequeno e as consultas principais usam paginação, `AsNoTracking()` e índices em campos de busca.
+
+### Storage Account
+
+O Storage Account foi considerado para cumprir a rubrica de serviços de armazenamento em nuvem. Como o projeto não armazena áudio real, o uso previsto é mínimo, podendo servir para documentação, imagens ou arquivos auxiliares. A escolha por redundância LRS mantém o custo baixo e atende ao escopo demonstrativo.
+
+### Sustentabilidade da Arquitetura
+
+A arquitetura evita recursos desnecessários e mantém os serviços independentes. API, Web, banco e storage podem evoluir separadamente. Isso torna o ambiente mais sustentável porque permite escalar apenas o componente que realmente precisar de mais capacidade, sem aumentar custo ou consumo de recursos do sistema inteiro.
 ## Cumprimento das Rubricas
 
 | Rubrica | Requisito | Implementação |
